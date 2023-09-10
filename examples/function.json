@@ -1,0 +1,165 @@
+{
+  "name": "examples/function.rinha",
+  "expression": {
+    "kind": "Let",
+    "name": {
+      "text": "add",
+      "location": {
+        "start": 4,
+        "end": 7,
+        "filename": "examples/function.rinha"
+      }
+    },
+    "value": {
+      "kind": "Function",
+      "parameters": [
+        {
+          "text": "a",
+          "location": {
+            "start": 14,
+            "end": 15,
+            "filename": "examples/function.rinha"
+          }
+        },
+        {
+          "text": "b",
+          "location": {
+            "start": 17,
+            "end": 18,
+            "filename": "examples/function.rinha"
+          }
+        }
+      ],
+      "value": {
+        "kind": "Binary",
+        "lhs": {
+          "kind": "Var",
+          "text": "a",
+          "location": {
+            "start": 27,
+            "end": 28,
+            "filename": "examples/function.rinha"
+          }
+        },
+        "op": "Add",
+        "rhs": {
+          "kind": "Binary",
+          "lhs": {
+            "kind": "Var",
+            "text": "b",
+            "location": {
+              "start": 31,
+              "end": 32,
+              "filename": "examples/function.rinha"
+            }
+          },
+          "op": "Add",
+          "rhs": {
+            "kind": "Var",
+            "text": "c",
+            "location": {
+              "start": 35,
+              "end": 36,
+              "filename": "examples/function.rinha"
+            }
+          },
+          "location": {
+            "start": 31,
+            "end": 36,
+            "filename": "examples/function.rinha"
+          }
+        },
+        "location": {
+          "start": 27,
+          "end": 36,
+          "filename": "examples/function.rinha"
+        }
+      },
+      "location": {
+        "start": 10,
+        "end": 38,
+        "filename": "examples/function.rinha"
+      }
+    },
+    "next": {
+      "kind": "Let",
+      "name": {
+        "text": "c",
+        "location": {
+          "start": 45,
+          "end": 46,
+          "filename": "examples/function.rinha"
+        }
+      },
+      "value": {
+        "kind": "Int",
+        "value": 3,
+        "location": {
+          "start": 49,
+          "end": 50,
+          "filename": "examples/function.rinha"
+        }
+      },
+      "next": {
+        "kind": "Print",
+        "value": {
+          "kind": "Call",
+          "callee": {
+            "kind": "Var",
+            "text": "add",
+            "location": {
+              "start": 59,
+              "end": 62,
+              "filename": "examples/function.rinha"
+            }
+          },
+          "arguments": [
+            {
+              "kind": "Int",
+              "value": 1,
+              "location": {
+                "start": 63,
+                "end": 64,
+                "filename": "examples/function.rinha"
+              }
+            },
+            {
+              "kind": "Int",
+              "value": 2,
+              "location": {
+                "start": 66,
+                "end": 67,
+                "filename": "examples/function.rinha"
+              }
+            }
+          ],
+          "location": {
+            "start": 59,
+            "end": 68,
+            "filename": "examples/function.rinha"
+          }
+        },
+        "location": {
+          "start": 53,
+          "end": 69,
+          "filename": "examples/function.rinha"
+        }
+      },
+      "location": {
+        "start": 41,
+        "end": 69,
+        "filename": "examples/function.rinha"
+      }
+    },
+    "location": {
+      "start": 0,
+      "end": 69,
+      "filename": "examples/function.rinha"
+    }
+  },
+  "location": {
+    "start": 0,
+    "end": 69,
+    "filename": "examples/function.rinha"
+  }
+}

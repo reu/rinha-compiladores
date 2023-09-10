@@ -15,64 +15,76 @@ pub struct File {
     expression: Term,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct Int {
     value: i32,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct Bool {
     value: bool,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct Str {
     value: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct Print {
     value: Box<Term>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct Binary {
     rhs: Box<Term>,
     op: BinaryOp,
     lhs: Box<Term>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Deserialize)]
 pub enum BinaryOp {
     Add,
     Sub,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct If {
     condition: Box<Term>,
     then: Box<Term>,
     otherwise: Box<Term>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct Parameter {
     text: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct Let {
     name: Parameter,
     value: Box<Term>,
     next: Box<Term>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct Var {
     text: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Deserialize)]
+pub struct Function {
+    parameters: Vec<Parameter>,
+    value: Box<Term>,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct Call {
+    callee: Box<Term>,
+    arguments: Vec<Term>,
+}
+
+#[derive(Debug, Clone, Deserialize)]
 #[serde(tag = "kind")]
 pub enum Term {
     Int(Int),
@@ -83,6 +95,8 @@ pub enum Term {
     If(If),
     Let(Let),
     Var(Var),
+    Function(Function),
+    Call(Call),
 }
 
 #[derive(Debug, Clone)]
@@ -91,6 +105,11 @@ pub enum Val {
     Int(i32),
     Bool(bool),
     Str(String),
+    Closure {
+        body: Term,
+        params: Vec<Parameter>,
+        env: Scope,
+    },
 }
 
 pub type Scope = HashMap<String, Val>;
@@ -146,13 +165,28 @@ fn eval(term: Term, scope: &mut Scope) -> Val {
             Some(val) => val.clone(),
             None => panic!("variável não encontrada"),
         },
+        Term::Function(f) => Val::Closure {
+            body: *f.value,
+            params: f.parameters,
+            env: scope.clone(),
+        },
+        Term::Call(call) => match eval(*call.callee, scope) {
+            Val::Closure { body, params, env } => {
+                let mut new_scope = scope.clone();
+                for (param, arg) in params.into_iter().zip(call.arguments) {
+                    new_scope.insert(param.text, eval(arg, scope));
+                }
+                eval(body, &mut new_scope)
+            }
+            _ => panic!("não é uma função"),
+        },
     }
 }
 
 fn main() {
     let mut program = String::new();
     stdin().lock().read_to_string(&mut program).unwrap();
-    let program = serde_json::from_str::<File>(&program).unwrap();
+    let program = serde_json::from_str::<File>(&program).expect("Não parseou");
 
     let term = program.expression;
     let mut scope = HashMap::new();
