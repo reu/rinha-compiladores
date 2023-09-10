@@ -78,6 +78,9 @@ fn eval(term: Term) -> Val {
                 let rhs = eval(*bin.rhs);
                 match (lhs, rhs) {
                     (Val::Int(a), Val::Int(b)) => Val::Int(a + b),
+                    (Val::Str(s), Val::Int(b)) => Val::Str(format!("{s}{b}")),
+                    (Val::Int(s), Val::Str(b)) => Val::Str(format!("{s}{b}")),
+                    (Val::Str(s), Val::Str(b)) => Val::Str(format!("{s}{b}")),
                     _ => panic!("operadores inválidos"),
                 }
             }
