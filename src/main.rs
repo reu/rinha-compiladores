@@ -46,6 +46,7 @@ pub struct Binary {
 pub enum BinaryOp {
     Add,
     Sub,
+    Lt,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -146,6 +147,14 @@ fn eval(term: Term, scope: &mut Scope) -> Val {
                 let rhs = eval(*bin.rhs, scope);
                 match (lhs, rhs) {
                     (Val::Int(a), Val::Int(b)) => Val::Int(a - b),
+                    _ => panic!("operadores inválidos"),
+                }
+            }
+            BinaryOp::Lt => {
+                let lhs = eval(*bin.lhs, scope);
+                let rhs = eval(*bin.rhs, scope);
+                match (lhs, rhs) {
+                    (Val::Int(a), Val::Int(b)) => Val::Bool(a < b),
                     _ => panic!("operadores inválidos"),
                 }
             }
