@@ -132,35 +132,28 @@ fn eval(term: Term, scope: &mut Scope) -> Val {
             };
             Val::Void
         }
-        Term::Binary(bin) => match bin.op {
-            BinaryOp::Add => {
-                let lhs = eval(*bin.lhs, scope);
-                let rhs = eval(*bin.rhs, scope);
-                match (lhs, rhs) {
+        Term::Binary(bin) => {
+            let lhs = eval(*bin.lhs, scope);
+            let rhs = eval(*bin.rhs, scope);
+            match bin.op {
+                BinaryOp::Add => match (lhs, rhs) {
                     (Val::Int(a), Val::Int(b)) => Val::Int(a + b),
-                    (Val::Str(s), Val::Int(b)) => Val::Str(format!("{s}{b}")),
-                    (Val::Int(s), Val::Str(b)) => Val::Str(format!("{s}{b}")),
-                    (Val::Str(s), Val::Str(b)) => Val::Str(format!("{s}{b}")),
+                    (Val::Str(a), Val::Int(b)) => Val::Str(format!("{a}{b}")),
+                    (Val::Int(a), Val::Str(b)) => Val::Str(format!("{a}{b}")),
+                    (Val::Str(a), Val::Str(b)) => Val::Str(format!("{a}{b}")),
                     _ => panic!("operadores inválidos"),
-                }
-            }
-            BinaryOp::Sub => {
-                let lhs = eval(*bin.lhs, scope);
-                let rhs = eval(*bin.rhs, scope);
-                match (lhs, rhs) {
+                },
+                BinaryOp::Sub => match (lhs, rhs) {
                     (Val::Int(a), Val::Int(b)) => Val::Int(a - b),
                     _ => panic!("operadores inválidos"),
-                }
-            }
-            BinaryOp::Lt => {
-                let lhs = eval(*bin.lhs, scope);
-                let rhs = eval(*bin.rhs, scope);
-                match (lhs, rhs) {
+                },
+                BinaryOp::Lt => match (lhs, rhs) {
                     (Val::Int(a), Val::Int(b)) => Val::Bool(a < b),
                     _ => panic!("operadores inválidos"),
-                }
+                },
             }
-        },
+        }
+
         Term::If(i) => match eval(*i.condition, scope) {
             Val::Bool(true) => eval(*i.then, scope),
             Val::Bool(false) => eval(*i.otherwise, scope),
