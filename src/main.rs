@@ -161,7 +161,7 @@ fn eval(term: Term, scope: &mut Scope) -> Val {
         },
         Term::Let(l) => {
             let name = l.name.text;
-            let mut value = match eval(*l.value, scope) {
+            match eval(*l.value, scope) {
                 Val::Closure { body, params, env } => {
                     let closure = Val::Closure {
                         body,
