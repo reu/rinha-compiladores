@@ -1,10 +1,12 @@
 #![allow(unused)]
 
 use std::{
+    cell::RefCell,
     collections::HashMap,
     fs,
     hash::Hash,
     io::{stdin, Read},
+    rc::Rc,
 };
 
 use serde::Deserialize;
@@ -109,7 +111,7 @@ pub enum Val {
     Closure {
         body: Term,
         params: Vec<Parameter>,
-        env: Scope,
+        env: Rc<RefCell<Scope>>,
     },
 }
 
@@ -166,8 +168,20 @@ fn eval(term: Term, scope: &mut Scope) -> Val {
         },
         Term::Let(l) => {
             let name = l.name.text;
-            let value = eval(*l.value, scope);
-            scope.insert(name, value);
+            let mut value = match eval(*l.value, scope) {
+                Val::Closure { body, params, env } => {
+                    let closure = Val::Closure {
+                        body,
+                        params,
+                        env: env.clone(),
+                    };
+                    env.borrow_mut().insert(name.clone(), closure.clone());
+                    scope.insert(name.clone(), closure.clone());
+                }
+                val => {
+                    scope.insert(name, val);
+                }
+            };
             eval(*l.next, scope)
         }
         Term::Var(v) => match scope.get(&v.text) {
@@ -177,11 +191,11 @@ fn eval(term: Term, scope: &mut Scope) -> Val {
         Term::Function(f) => Val::Closure {
             body: *f.value,
             params: f.parameters,
-            env: scope.clone(),
+            env: Rc::new(RefCell::new(scope.clone())),
         },
         Term::Call(call) => match eval(*call.callee, scope) {
             Val::Closure { body, params, env } => {
-                let mut new_scope = scope.clone();
+                let mut new_scope = env.borrow_mut().clone();
                 for (param, arg) in params.into_iter().zip(call.arguments) {
                     new_scope.insert(param.text, eval(arg, scope));
                 }
