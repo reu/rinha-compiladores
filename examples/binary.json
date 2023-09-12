@@ -1,0 +1,784 @@
+{
+  "name": "examples/binary.rinha",
+  "expression": {
+    "kind": "Let",
+    "name": {
+      "text": "_",
+      "location": {
+        "start": 4,
+        "end": 5,
+        "filename": "examples/binary.rinha"
+      }
+    },
+    "value": {
+      "kind": "Print",
+      "value": {
+        "kind": "Binary",
+        "lhs": {
+          "kind": "Str",
+          "value": "1 == 1 = ",
+          "location": {
+            "start": 14,
+            "end": 25,
+            "filename": "examples/binary.rinha"
+          }
+        },
+        "op": "Add",
+        "rhs": {
+          "kind": "Binary",
+          "lhs": {
+            "kind": "Int",
+            "value": 1,
+            "location": {
+              "start": 29,
+              "end": 30,
+              "filename": "examples/binary.rinha"
+            }
+          },
+          "op": "Eq",
+          "rhs": {
+            "kind": "Int",
+            "value": 1,
+            "location": {
+              "start": 34,
+              "end": 35,
+              "filename": "examples/binary.rinha"
+            }
+          },
+          "location": {
+            "start": 29,
+            "end": 35,
+            "filename": "examples/binary.rinha"
+          }
+        },
+        "location": {
+          "start": 14,
+          "end": 36,
+          "filename": "examples/binary.rinha"
+        }
+      },
+      "location": {
+        "start": 8,
+        "end": 37,
+        "filename": "examples/binary.rinha"
+      }
+    },
+    "next": {
+      "kind": "Let",
+      "name": {
+        "text": "_",
+        "location": {
+          "start": 43,
+          "end": 44,
+          "filename": "examples/binary.rinha"
+        }
+      },
+      "value": {
+        "kind": "Print",
+        "value": {
+          "kind": "Binary",
+          "lhs": {
+            "kind": "Str",
+            "value": "1 != 2 = ",
+            "location": {
+              "start": 53,
+              "end": 64,
+              "filename": "examples/binary.rinha"
+            }
+          },
+          "op": "Add",
+          "rhs": {
+            "kind": "Binary",
+            "lhs": {
+              "kind": "Int",
+              "value": 1,
+              "location": {
+                "start": 68,
+                "end": 69,
+                "filename": "examples/binary.rinha"
+              }
+            },
+            "op": "Neq",
+            "rhs": {
+              "kind": "Int",
+              "value": 2,
+              "location": {
+                "start": 73,
+                "end": 74,
+                "filename": "examples/binary.rinha"
+              }
+            },
+            "location": {
+              "start": 68,
+              "end": 74,
+              "filename": "examples/binary.rinha"
+            }
+          },
+          "location": {
+            "start": 53,
+            "end": 75,
+            "filename": "examples/binary.rinha"
+          }
+        },
+        "location": {
+          "start": 47,
+          "end": 76,
+          "filename": "examples/binary.rinha"
+        }
+      },
+      "next": {
+        "kind": "Let",
+        "name": {
+          "text": "_",
+          "location": {
+            "start": 82,
+            "end": 83,
+            "filename": "examples/binary.rinha"
+          }
+        },
+        "value": {
+          "kind": "Print",
+          "value": {
+            "kind": "Binary",
+            "lhs": {
+              "kind": "Str",
+              "value": "hello == hello = ",
+              "location": {
+                "start": 92,
+                "end": 111,
+                "filename": "examples/binary.rinha"
+              }
+            },
+            "op": "Add",
+            "rhs": {
+              "kind": "Binary",
+              "lhs": {
+                "kind": "Str",
+                "value": "hello",
+                "location": {
+                  "start": 115,
+                  "end": 122,
+                  "filename": "examples/binary.rinha"
+                }
+              },
+              "op": "Eq",
+              "rhs": {
+                "kind": "Str",
+                "value": "hello",
+                "location": {
+                  "start": 126,
+                  "end": 133,
+                  "filename": "examples/binary.rinha"
+                }
+              },
+              "location": {
+                "start": 115,
+                "end": 133,
+                "filename": "examples/binary.rinha"
+              }
+            },
+            "location": {
+              "start": 92,
+              "end": 134,
+              "filename": "examples/binary.rinha"
+            }
+          },
+          "location": {
+            "start": 86,
+            "end": 135,
+            "filename": "examples/binary.rinha"
+          }
+        },
+        "next": {
+          "kind": "Let",
+          "name": {
+            "text": "_",
+            "location": {
+              "start": 141,
+              "end": 142,
+              "filename": "examples/binary.rinha"
+            }
+          },
+          "value": {
+            "kind": "Print",
+            "value": {
+              "kind": "Binary",
+              "lhs": {
+                "kind": "Str",
+                "value": "hello != world = ",
+                "location": {
+                  "start": 151,
+                  "end": 170,
+                  "filename": "examples/binary.rinha"
+                }
+              },
+              "op": "Add",
+              "rhs": {
+                "kind": "Binary",
+                "lhs": {
+                  "kind": "Str",
+                  "value": "hello",
+                  "location": {
+                    "start": 174,
+                    "end": 181,
+                    "filename": "examples/binary.rinha"
+                  }
+                },
+                "op": "Neq",
+                "rhs": {
+                  "kind": "Str",
+                  "value": "world",
+                  "location": {
+                    "start": 185,
+                    "end": 192,
+                    "filename": "examples/binary.rinha"
+                  }
+                },
+                "location": {
+                  "start": 174,
+                  "end": 192,
+                  "filename": "examples/binary.rinha"
+                }
+              },
+              "location": {
+                "start": 151,
+                "end": 193,
+                "filename": "examples/binary.rinha"
+              }
+            },
+            "location": {
+              "start": 145,
+              "end": 194,
+              "filename": "examples/binary.rinha"
+            }
+          },
+          "next": {
+            "kind": "Let",
+            "name": {
+              "text": "_",
+              "location": {
+                "start": 200,
+                "end": 201,
+                "filename": "examples/binary.rinha"
+              }
+            },
+            "value": {
+              "kind": "Print",
+              "value": {
+                "kind": "Binary",
+                "lhs": {
+                  "kind": "Str",
+                  "value": "1 + 1 = ",
+                  "location": {
+                    "start": 210,
+                    "end": 220,
+                    "filename": "examples/binary.rinha"
+                  }
+                },
+                "op": "Add",
+                "rhs": {
+                  "kind": "Binary",
+                  "lhs": {
+                    "kind": "Int",
+                    "value": 1,
+                    "location": {
+                      "start": 224,
+                      "end": 225,
+                      "filename": "examples/binary.rinha"
+                    }
+                  },
+                  "op": "Add",
+                  "rhs": {
+                    "kind": "Int",
+                    "value": 1,
+                    "location": {
+                      "start": 228,
+                      "end": 229,
+                      "filename": "examples/binary.rinha"
+                    }
+                  },
+                  "location": {
+                    "start": 224,
+                    "end": 229,
+                    "filename": "examples/binary.rinha"
+                  }
+                },
+                "location": {
+                  "start": 210,
+                  "end": 230,
+                  "filename": "examples/binary.rinha"
+                }
+              },
+              "location": {
+                "start": 204,
+                "end": 231,
+                "filename": "examples/binary.rinha"
+              }
+            },
+            "next": {
+              "kind": "Let",
+              "name": {
+                "text": "_",
+                "location": {
+                  "start": 237,
+                  "end": 238,
+                  "filename": "examples/binary.rinha"
+                }
+              },
+              "value": {
+                "kind": "Print",
+                "value": {
+                  "kind": "Binary",
+                  "lhs": {
+                    "kind": "Str",
+                    "value": "1 - 1 = ",
+                    "location": {
+                      "start": 247,
+                      "end": 257,
+                      "filename": "examples/binary.rinha"
+                    }
+                  },
+                  "op": "Add",
+                  "rhs": {
+                    "kind": "Binary",
+                    "lhs": {
+                      "kind": "Int",
+                      "value": 1,
+                      "location": {
+                        "start": 261,
+                        "end": 262,
+                        "filename": "examples/binary.rinha"
+                      }
+                    },
+                    "op": "Sub",
+                    "rhs": {
+                      "kind": "Int",
+                      "value": 1,
+                      "location": {
+                        "start": 265,
+                        "end": 266,
+                        "filename": "examples/binary.rinha"
+                      }
+                    },
+                    "location": {
+                      "start": 261,
+                      "end": 266,
+                      "filename": "examples/binary.rinha"
+                    }
+                  },
+                  "location": {
+                    "start": 247,
+                    "end": 267,
+                    "filename": "examples/binary.rinha"
+                  }
+                },
+                "location": {
+                  "start": 241,
+                  "end": 268,
+                  "filename": "examples/binary.rinha"
+                }
+              },
+              "next": {
+                "kind": "Let",
+                "name": {
+                  "text": "_",
+                  "location": {
+                    "start": 274,
+                    "end": 275,
+                    "filename": "examples/binary.rinha"
+                  }
+                },
+                "value": {
+                  "kind": "Print",
+                  "value": {
+                    "kind": "Binary",
+                    "lhs": {
+                      "kind": "Str",
+                      "value": "4 * 2 = ",
+                      "location": {
+                        "start": 284,
+                        "end": 294,
+                        "filename": "examples/binary.rinha"
+                      }
+                    },
+                    "op": "Add",
+                    "rhs": {
+                      "kind": "Binary",
+                      "lhs": {
+                        "kind": "Int",
+                        "value": 4,
+                        "location": {
+                          "start": 298,
+                          "end": 299,
+                          "filename": "examples/binary.rinha"
+                        }
+                      },
+                      "op": "Mul",
+                      "rhs": {
+                        "kind": "Int",
+                        "value": 2,
+                        "location": {
+                          "start": 302,
+                          "end": 303,
+                          "filename": "examples/binary.rinha"
+                        }
+                      },
+                      "location": {
+                        "start": 298,
+                        "end": 303,
+                        "filename": "examples/binary.rinha"
+                      }
+                    },
+                    "location": {
+                      "start": 284,
+                      "end": 304,
+                      "filename": "examples/binary.rinha"
+                    }
+                  },
+                  "location": {
+                    "start": 278,
+                    "end": 305,
+                    "filename": "examples/binary.rinha"
+                  }
+                },
+                "next": {
+                  "kind": "Let",
+                  "name": {
+                    "text": "_",
+                    "location": {
+                      "start": 311,
+                      "end": 312,
+                      "filename": "examples/binary.rinha"
+                    }
+                  },
+                  "value": {
+                    "kind": "Print",
+                    "value": {
+                      "kind": "Binary",
+                      "lhs": {
+                        "kind": "Str",
+                        "value": "4 / 2 = ",
+                        "location": {
+                          "start": 321,
+                          "end": 331,
+                          "filename": "examples/binary.rinha"
+                        }
+                      },
+                      "op": "Add",
+                      "rhs": {
+                        "kind": "Binary",
+                        "lhs": {
+                          "kind": "Int",
+                          "value": 4,
+                          "location": {
+                            "start": 335,
+                            "end": 336,
+                            "filename": "examples/binary.rinha"
+                          }
+                        },
+                        "op": "Div",
+                        "rhs": {
+                          "kind": "Int",
+                          "value": 2,
+                          "location": {
+                            "start": 339,
+                            "end": 340,
+                            "filename": "examples/binary.rinha"
+                          }
+                        },
+                        "location": {
+                          "start": 335,
+                          "end": 340,
+                          "filename": "examples/binary.rinha"
+                        }
+                      },
+                      "location": {
+                        "start": 321,
+                        "end": 341,
+                        "filename": "examples/binary.rinha"
+                      }
+                    },
+                    "location": {
+                      "start": 315,
+                      "end": 342,
+                      "filename": "examples/binary.rinha"
+                    }
+                  },
+                  "next": {
+                    "kind": "Let",
+                    "name": {
+                      "text": "_",
+                      "location": {
+                        "start": 348,
+                        "end": 349,
+                        "filename": "examples/binary.rinha"
+                      }
+                    },
+                    "value": {
+                      "kind": "Print",
+                      "value": {
+                        "kind": "Binary",
+                        "lhs": {
+                          "kind": "Str",
+                          "value": "3 % 2 = ",
+                          "location": {
+                            "start": 358,
+                            "end": 368,
+                            "filename": "examples/binary.rinha"
+                          }
+                        },
+                        "op": "Add",
+                        "rhs": {
+                          "kind": "Binary",
+                          "lhs": {
+                            "kind": "Int",
+                            "value": 3,
+                            "location": {
+                              "start": 372,
+                              "end": 373,
+                              "filename": "examples/binary.rinha"
+                            }
+                          },
+                          "op": "Rem",
+                          "rhs": {
+                            "kind": "Int",
+                            "value": 2,
+                            "location": {
+                              "start": 376,
+                              "end": 377,
+                              "filename": "examples/binary.rinha"
+                            }
+                          },
+                          "location": {
+                            "start": 372,
+                            "end": 377,
+                            "filename": "examples/binary.rinha"
+                          }
+                        },
+                        "location": {
+                          "start": 358,
+                          "end": 378,
+                          "filename": "examples/binary.rinha"
+                        }
+                      },
+                      "location": {
+                        "start": 352,
+                        "end": 379,
+                        "filename": "examples/binary.rinha"
+                      }
+                    },
+                    "next": {
+                      "kind": "Let",
+                      "name": {
+                        "text": "_",
+                        "location": {
+                          "start": 385,
+                          "end": 386,
+                          "filename": "examples/binary.rinha"
+                        }
+                      },
+                      "value": {
+                        "kind": "Print",
+                        "value": {
+                          "kind": "Binary",
+                          "lhs": {
+                            "kind": "Str",
+                            "value": "true == true = ",
+                            "location": {
+                              "start": 395,
+                              "end": 412,
+                              "filename": "examples/binary.rinha"
+                            }
+                          },
+                          "op": "Add",
+                          "rhs": {
+                            "kind": "Binary",
+                            "lhs": {
+                              "kind": "Bool",
+                              "value": true,
+                              "location": {
+                                "start": 416,
+                                "end": 420,
+                                "filename": "examples/binary.rinha"
+                              }
+                            },
+                            "op": "Eq",
+                            "rhs": {
+                              "kind": "Bool",
+                              "value": true,
+                              "location": {
+                                "start": 424,
+                                "end": 428,
+                                "filename": "examples/binary.rinha"
+                              }
+                            },
+                            "location": {
+                              "start": 416,
+                              "end": 428,
+                              "filename": "examples/binary.rinha"
+                            }
+                          },
+                          "location": {
+                            "start": 395,
+                            "end": 429,
+                            "filename": "examples/binary.rinha"
+                          }
+                        },
+                        "location": {
+                          "start": 389,
+                          "end": 430,
+                          "filename": "examples/binary.rinha"
+                        }
+                      },
+                      "next": {
+                        "kind": "Let",
+                        "name": {
+                          "text": "_",
+                          "location": {
+                            "start": 436,
+                            "end": 437,
+                            "filename": "examples/binary.rinha"
+                          }
+                        },
+                        "value": {
+                          "kind": "Print",
+                          "value": {
+                            "kind": "Binary",
+                            "lhs": {
+                              "kind": "Str",
+                              "value": "true != false = ",
+                              "location": {
+                                "start": 446,
+                                "end": 464,
+                                "filename": "examples/binary.rinha"
+                              }
+                            },
+                            "op": "Add",
+                            "rhs": {
+                              "kind": "Binary",
+                              "lhs": {
+                                "kind": "Bool",
+                                "value": true,
+                                "location": {
+                                  "start": 468,
+                                  "end": 472,
+                                  "filename": "examples/binary.rinha"
+                                }
+                              },
+                              "op": "Neq",
+                              "rhs": {
+                                "kind": "Bool",
+                                "value": false,
+                                "location": {
+                                  "start": 476,
+                                  "end": 481,
+                                  "filename": "examples/binary.rinha"
+                                }
+                              },
+                              "location": {
+                                "start": 468,
+                                "end": 481,
+                                "filename": "examples/binary.rinha"
+                              }
+                            },
+                            "location": {
+                              "start": 446,
+                              "end": 482,
+                              "filename": "examples/binary.rinha"
+                            }
+                          },
+                          "location": {
+                            "start": 440,
+                            "end": 483,
+                            "filename": "examples/binary.rinha"
+                          }
+                        },
+                        "next": {
+                          "kind": "Print",
+                          "value": {
+                            "kind": "Str",
+                            "value": "",
+                            "location": {
+                              "start": 491,
+                              "end": 493,
+                              "filename": "examples/binary.rinha"
+                            }
+                          },
+                          "location": {
+                            "start": 485,
+                            "end": 494,
+                            "filename": "examples/binary.rinha"
+                          }
+                        },
+                        "location": {
+                          "start": 432,
+                          "end": 494,
+                          "filename": "examples/binary.rinha"
+                        }
+                      },
+                      "location": {
+                        "start": 381,
+                        "end": 494,
+                        "filename": "examples/binary.rinha"
+                      }
+                    },
+                    "location": {
+                      "start": 344,
+                      "end": 494,
+                      "filename": "examples/binary.rinha"
+                    }
+                  },
+                  "location": {
+                    "start": 307,
+                    "end": 494,
+                    "filename": "examples/binary.rinha"
+                  }
+                },
+                "location": {
+                  "start": 270,
+                  "end": 494,
+                  "filename": "examples/binary.rinha"
+                }
+              },
+              "location": {
+                "start": 233,
+                "end": 494,
+                "filename": "examples/binary.rinha"
+              }
+            },
+            "location": {
+              "start": 196,
+              "end": 494,
+              "filename": "examples/binary.rinha"
+            }
+          },
+          "location": {
+            "start": 137,
+            "end": 494,
+            "filename": "examples/binary.rinha"
+          }
+        },
+        "location": {
+          "start": 78,
+          "end": 494,
+          "filename": "examples/binary.rinha"
+        }
+      },
+      "location": {
+        "start": 39,
+        "end": 494,
+        "filename": "examples/binary.rinha"
+      }
+    },
+    "location": {
+      "start": 0,
+      "end": 494,
+      "filename": "examples/binary.rinha"
+    }
+  },
+  "location": {
+    "start": 0,
+    "end": 494,
+    "filename": "examples/binary.rinha"
+  }
+}

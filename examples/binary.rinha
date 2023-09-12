@@ -1,0 +1,12 @@
+let _ = print("1 == 1 = " + (1 == 1));
+let _ = print("1 != 2 = " + (1 != 2));
+let _ = print("hello == hello = " + ("hello" == "hello"));
+let _ = print("hello != world = " + ("hello" != "world"));
+let _ = print("1 + 1 = " + (1 + 1));
+let _ = print("1 - 1 = " + (1 - 1));
+let _ = print("4 * 2 = " + (4 * 2));
+let _ = print("4 / 2 = " + (4 / 2));
+let _ = print("3 % 2 = " + (3 % 2));
+let _ = print("true == true = " + (true == true));
+let _ = print("true != false = " + (true != false));
+print("")

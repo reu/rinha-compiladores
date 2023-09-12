@@ -1,6 +1,7 @@
 use std::{
     cell::RefCell,
     collections::HashMap,
+    fmt::Display,
     fs,
     io::{stdin, Read},
     rc::Rc,
@@ -60,7 +61,17 @@ pub struct Binary {
 pub enum BinaryOp {
     Add,
     Sub,
+    Mul,
+    Div,
+    Rem,
+    Eq,
+    Neq,
     Lt,
+    Gt,
+    Lte,
+    Gte,
+    And,
+    Or,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -149,6 +160,19 @@ pub enum Val {
     },
 }
 
+impl Display for Val {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Val::Void => Ok(()),
+            Val::Int(i) => write!(f, "{i}"),
+            Val::Bool(true) => write!(f, "true"),
+            Val::Bool(false) => write!(f, "false"),
+            Val::Str(s) => write!(f, "{s}"),
+            Val::Closure { .. } => write!(f, "<#closure>"),
+        }
+    }
+}
+
 pub type Scope = HashMap<String, Val>;
 
 fn eval(term: Term, scope: &mut Scope) -> Result<Val, RuntimeError> {
@@ -158,33 +182,51 @@ fn eval(term: Term, scope: &mut Scope) -> Result<Val, RuntimeError> {
         Term::Bool(bool) => Ok(Val::Bool(bool.value)),
         Term::Print(print) => {
             let val = eval(*print.value, scope)?;
-            match val {
-                Val::Int(n) => print!("{n}"),
-                Val::Bool(b) => print!("{b}"),
-                Val::Str(s) => print!("{s}"),
-                Val::Closure { .. } => print!("<#closure>"),
-                Val::Void => {}
-            };
+            print!("{val}");
             Ok(Val::Void)
         }
 
         Term::Binary(bin) => {
             let lhs = eval(*bin.lhs, scope)?;
             let rhs = eval(*bin.rhs, scope)?;
+
+            macro_rules! bin_op {
+                ($left:ident[$lhs:expr], $right:ident[$rhs:expr] -> $f:expr) => {
+                    match (lhs, rhs) {
+                        (Val::$left(lhs), Val::$right(rhs)) => $f(lhs, rhs),
+                        _ => Err(RuntimeError::invalid_binary_operation(bin.location)),
+                    }
+                };
+            }
             match bin.op {
                 BinaryOp::Add => match (lhs, rhs) {
                     (Val::Int(a), Val::Int(b)) => Ok(Val::Int(a + b)),
-                    (Val::Str(a), Val::Int(b)) => Ok(Val::Str(format!("{a}{b}"))),
-                    (Val::Int(a), Val::Str(b)) => Ok(Val::Str(format!("{a}{b}"))),
-                    (Val::Str(a), Val::Str(b)) => Ok(Val::Str(format!("{a}{b}"))),
+                    (a, b) => Ok(Val::Str(format!("{a}{b}"))),
+                },
+                BinaryOp::Sub => bin_op!(Int[lhs], Int[lhs] -> |a, b| Ok(Val::Int(a - b))),
+                BinaryOp::Mul => bin_op!(Int[lhs], Int[lhs] -> |a, b| Ok(Val::Int(a * b))),
+                BinaryOp::Div => match (lhs, rhs) {
+                    (Val::Int(_), Val::Int(0)) => Err(RuntimeError::division_by_zero(bin.location)),
+                    (Val::Int(a), Val::Int(b)) => Ok(Val::Int(a / b)),
                     _ => Err(RuntimeError::invalid_binary_operation(bin.location)),
                 },
-                BinaryOp::Sub => match (lhs, rhs) {
-                    (Val::Int(a), Val::Int(b)) => Ok(Val::Int(a - b)),
+                BinaryOp::Rem => bin_op!(Int[lhs], Int[rhs] -> |a, b| Ok(Val::Int(a % b))),
+                BinaryOp::And => bin_op!(Bool[lhs], Bool[rhs] -> |a, b| Ok(Val::Bool(a && b))),
+                BinaryOp::Or => bin_op!(Bool[lhs], Bool[rhs] -> |a, b| Ok(Val::Bool(a || b))),
+                BinaryOp::Lt => bin_op!(Int[lhs], Int[rhs] -> |a, b| Ok(Val::Bool(a < b))),
+                BinaryOp::Lte => bin_op!(Int[lhs], Int[rhs] -> |a, b| Ok(Val::Bool(a <= b))),
+                BinaryOp::Gt => bin_op!(Int[lhs], Int[rhs] -> |a, b| Ok(Val::Bool(a > b))),
+                BinaryOp::Gte => bin_op!(Int[lhs], Int[rhs] -> |a, b| Ok(Val::Bool(a >= b))),
+                BinaryOp::Eq => match (lhs, rhs) {
+                    (Val::Int(a), Val::Int(b)) => Ok(Val::Bool(a == b)),
+                    (Val::Bool(a), Val::Bool(b)) => Ok(Val::Bool(a == b)),
+                    (Val::Str(a), Val::Str(b)) => Ok(Val::Bool(a == b)),
                     _ => Err(RuntimeError::invalid_binary_operation(bin.location)),
                 },
-                BinaryOp::Lt => match (lhs, rhs) {
-                    (Val::Int(a), Val::Int(b)) => Ok(Val::Bool(a < b)),
+                BinaryOp::Neq => match (lhs, rhs) {
+                    (Val::Int(a), Val::Int(b)) => Ok(Val::Bool(a != b)),
+                    (Val::Bool(a), Val::Bool(b)) => Ok(Val::Bool(a != b)),
+                    (Val::Str(a), Val::Str(b)) => Ok(Val::Bool(a != b)),
                     _ => Err(RuntimeError::invalid_binary_operation(bin.location)),
                 },
             }

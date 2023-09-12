@@ -7,6 +7,7 @@ use crate::{Call, Function, Location, Var};
 #[derive(Debug)]
 pub enum ErrorKind {
     ArgumentError,
+    DivisionByZero,
     UnknowIdentifier(Var),
     InvalidBinaryOperation,
     InvalidNumberOfArguments(Function, Call),
@@ -33,6 +34,14 @@ impl RuntimeError {
             message: "identificador não encontrado".into(),
             location: var.location.clone(),
             kind: ErrorKind::UnknowIdentifier(var),
+        }
+    }
+
+    pub fn division_by_zero(loc: Location) -> Self {
+        Self {
+            message: "divisão por zero".into(),
+            location: loc,
+            kind: ErrorKind::DivisionByZero,
         }
     }
 
@@ -64,7 +73,9 @@ impl std::error::Error for RuntimeError {}
 impl Diagnostic for RuntimeError {
     fn labels(&self) -> Option<Box<dyn Iterator<Item = LabeledSpan> + '_>> {
         match self.kind {
-            ErrorKind::ArgumentError | ErrorKind::InvalidBinaryOperation => Some(Box::new(
+            ErrorKind::ArgumentError
+            | ErrorKind::InvalidBinaryOperation
+            | ErrorKind::DivisionByZero => Some(Box::new(
                 [LabeledSpan::at(
                     self.location.start..self.location.end,
                     self.message.clone(),
