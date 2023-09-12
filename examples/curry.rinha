@@ -1,0 +1,7 @@
+let add = fn (a) => {
+  fn (b) => {
+    a + b
+  }
+};
+let addOne = add(1);
+print(addOne(2))

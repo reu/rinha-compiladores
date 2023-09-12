@@ -1,0 +1,167 @@
+{
+  "name": "examples/curry.rinha",
+  "expression": {
+    "kind": "Let",
+    "name": {
+      "text": "add",
+      "location": {
+        "start": 4,
+        "end": 7,
+        "filename": "examples/curry.rinha"
+      }
+    },
+    "value": {
+      "kind": "Function",
+      "parameters": [
+        {
+          "text": "a",
+          "location": {
+            "start": 14,
+            "end": 15,
+            "filename": "examples/curry.rinha"
+          }
+        }
+      ],
+      "value": {
+        "kind": "Function",
+        "parameters": [
+          {
+            "text": "b",
+            "location": {
+              "start": 28,
+              "end": 29,
+              "filename": "examples/curry.rinha"
+            }
+          }
+        ],
+        "value": {
+          "kind": "Binary",
+          "lhs": {
+            "kind": "Var",
+            "text": "a",
+            "location": {
+              "start": 40,
+              "end": 41,
+              "filename": "examples/curry.rinha"
+            }
+          },
+          "op": "Add",
+          "rhs": {
+            "kind": "Var",
+            "text": "b",
+            "location": {
+              "start": 44,
+              "end": 45,
+              "filename": "examples/curry.rinha"
+            }
+          },
+          "location": {
+            "start": 40,
+            "end": 45,
+            "filename": "examples/curry.rinha"
+          }
+        },
+        "location": {
+          "start": 24,
+          "end": 49,
+          "filename": "examples/curry.rinha"
+        }
+      },
+      "location": {
+        "start": 10,
+        "end": 51,
+        "filename": "examples/curry.rinha"
+      }
+    },
+    "next": {
+      "kind": "Let",
+      "name": {
+        "text": "addOne",
+        "location": {
+          "start": 57,
+          "end": 63,
+          "filename": "examples/curry.rinha"
+        }
+      },
+      "value": {
+        "kind": "Call",
+        "callee": {
+          "kind": "Var",
+          "text": "add",
+          "location": {
+            "start": 66,
+            "end": 69,
+            "filename": "examples/curry.rinha"
+          }
+        },
+        "arguments": [
+          {
+            "kind": "Int",
+            "value": 1,
+            "location": {
+              "start": 70,
+              "end": 71,
+              "filename": "examples/curry.rinha"
+            }
+          }
+        ],
+        "location": {
+          "start": 66,
+          "end": 72,
+          "filename": "examples/curry.rinha"
+        }
+      },
+      "next": {
+        "kind": "Print",
+        "value": {
+          "kind": "Call",
+          "callee": {
+            "kind": "Var",
+            "text": "addOne",
+            "location": {
+              "start": 80,
+              "end": 86,
+              "filename": "examples/curry.rinha"
+            }
+          },
+          "arguments": [
+            {
+              "kind": "Int",
+              "value": 2,
+              "location": {
+                "start": 87,
+                "end": 88,
+                "filename": "examples/curry.rinha"
+              }
+            }
+          ],
+          "location": {
+            "start": 80,
+            "end": 89,
+            "filename": "examples/curry.rinha"
+          }
+        },
+        "location": {
+          "start": 74,
+          "end": 90,
+          "filename": "examples/curry.rinha"
+        }
+      },
+      "location": {
+        "start": 53,
+        "end": 90,
+        "filename": "examples/curry.rinha"
+      }
+    },
+    "location": {
+      "start": 0,
+      "end": 90,
+      "filename": "examples/curry.rinha"
+    }
+  },
+  "location": {
+    "start": 0,
+    "end": 90,
+    "filename": "examples/curry.rinha"
+  }
+}
