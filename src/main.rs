@@ -250,7 +250,7 @@ fn eval(term: Term, scope: &mut Scope) -> Result<Val, RuntimeError> {
                         env: env.clone(),
                     };
                     env.borrow_mut().insert(name.clone(), closure.clone());
-                    scope.insert(name.clone(), closure.clone());
+                    scope.insert(name, closure);
                 }
                 val => {
                     scope.insert(name, val);
