@@ -117,6 +117,25 @@ pub struct Call {
 }
 
 #[derive(Debug, Clone, Deserialize)]
+pub struct Tuple {
+    first: Box<Term>,
+    second: Box<Term>,
+    location: Location,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct First {
+    value: Box<Term>,
+    location: Location,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct Second {
+    value: Box<Term>,
+    location: Location,
+}
+
+#[derive(Debug, Clone, Deserialize)]
 #[serde(tag = "kind")]
 pub enum Term {
     Int(Int),
@@ -129,6 +148,9 @@ pub enum Term {
     Var(Var),
     Function(Function),
     Call(Call),
+    Tuple(Tuple),
+    First(First),
+    Second(Second),
 }
 
 impl Term {
@@ -144,6 +166,9 @@ impl Term {
             Term::Var(t) => &t.location,
             Term::Function(t) => &t.location,
             Term::Call(t) => &t.location,
+            Term::Tuple(t) => &t.location,
+            Term::First(t) => &t.location,
+            Term::Second(t) => &t.location,
         }
     }
 }
@@ -153,6 +178,7 @@ pub enum Val {
     Int(i32),
     Bool(bool),
     Str(String),
+    Tuple((Term, Term)),
     Closure {
         fun: Function,
         env: Rc<RefCell<Scope>>,
@@ -166,6 +192,7 @@ impl Display for Val {
             Val::Bool(true) => write!(f, "true"),
             Val::Bool(false) => write!(f, "false"),
             Val::Str(s) => write!(f, "{s}"),
+            Val::Tuple { .. } => write!(f, "(term, term)"),
             Val::Closure { .. } => write!(f, "<#closure>"),
         }
     }
@@ -183,6 +210,15 @@ fn eval(term: Term, scope: &mut Scope) -> Result<Val, RuntimeError> {
             print!("{val}");
             Ok(val)
         }
+        Term::Tuple(tuple) => Ok(Val::Tuple((*tuple.first, *tuple.second))),
+        Term::First(t) => match eval(*t.value, scope)? {
+            Val::Tuple((term, _)) => eval(term, scope),
+            _ => Err(RuntimeError::new("não é uma tupla", t.location)),
+        },
+        Term::Second(t) => match eval(*t.value, scope)? {
+            Val::Tuple((_, term)) => eval(term, scope),
+            _ => Err(RuntimeError::new("não é uma tupla", t.location)),
+        },
 
         Term::Binary(bin) => {
             let lhs = eval(*bin.lhs, scope)?;

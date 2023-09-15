@@ -1,0 +1,119 @@
+{
+  "name": "examples/tuple.rinha",
+  "expression": {
+    "kind": "Let",
+    "name": {
+      "text": "tuple",
+      "location": {
+        "start": 4,
+        "end": 9,
+        "filename": "examples/tuple.rinha"
+      }
+    },
+    "value": {
+      "kind": "Tuple",
+      "first": {
+        "kind": "Str",
+        "value": "hello",
+        "location": {
+          "start": 13,
+          "end": 20,
+          "filename": "examples/tuple.rinha"
+        }
+      },
+      "second": {
+        "kind": "Int",
+        "value": 10,
+        "location": {
+          "start": 22,
+          "end": 24,
+          "filename": "examples/tuple.rinha"
+        }
+      },
+      "location": {
+        "start": 12,
+        "end": 25,
+        "filename": "examples/tuple.rinha"
+      }
+    },
+    "next": {
+      "kind": "Print",
+      "value": {
+        "kind": "Binary",
+        "lhs": {
+          "kind": "First",
+          "value": {
+            "kind": "Var",
+            "text": "tuple",
+            "location": {
+              "start": 39,
+              "end": 44,
+              "filename": "examples/tuple.rinha"
+            }
+          },
+          "location": {
+            "start": 33,
+            "end": 45,
+            "filename": "examples/tuple.rinha"
+          }
+        },
+        "op": "Add",
+        "rhs": {
+          "kind": "Binary",
+          "lhs": {
+            "kind": "Str",
+            "value": " ",
+            "location": {
+              "start": 48,
+              "end": 51,
+              "filename": "examples/tuple.rinha"
+            }
+          },
+          "op": "Add",
+          "rhs": {
+            "kind": "Second",
+            "value": {
+              "kind": "Var",
+              "text": "tuple",
+              "location": {
+                "start": 61,
+                "end": 66,
+                "filename": "examples/tuple.rinha"
+              }
+            },
+            "location": {
+              "start": 54,
+              "end": 67,
+              "filename": "examples/tuple.rinha"
+            }
+          },
+          "location": {
+            "start": 48,
+            "end": 67,
+            "filename": "examples/tuple.rinha"
+          }
+        },
+        "location": {
+          "start": 33,
+          "end": 67,
+          "filename": "examples/tuple.rinha"
+        }
+      },
+      "location": {
+        "start": 27,
+        "end": 68,
+        "filename": "examples/tuple.rinha"
+      }
+    },
+    "location": {
+      "start": 0,
+      "end": 68,
+      "filename": "examples/tuple.rinha"
+    }
+  },
+  "location": {
+    "start": 0,
+    "end": 68,
+    "filename": "examples/tuple.rinha"
+  }
+}
