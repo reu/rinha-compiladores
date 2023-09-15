@@ -150,7 +150,6 @@ impl Term {
 
 #[derive(Debug, Clone)]
 pub enum Val {
-    Void,
     Int(i32),
     Bool(bool),
     Str(String),
@@ -163,7 +162,6 @@ pub enum Val {
 impl Display for Val {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Val::Void => Ok(()),
             Val::Int(i) => write!(f, "{i}"),
             Val::Bool(true) => write!(f, "true"),
             Val::Bool(false) => write!(f, "false"),
@@ -183,7 +181,7 @@ fn eval(term: Term, scope: &mut Scope) -> Result<Val, RuntimeError> {
         Term::Print(print) => {
             let val = eval(*print.value, scope)?;
             print!("{val}");
-            Ok(Val::Void)
+            Ok(val)
         }
 
         Term::Binary(bin) => {
