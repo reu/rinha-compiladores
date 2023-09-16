@@ -240,8 +240,8 @@ fn eval(term: Term, scope: &mut Scope) -> Result<Val, RuntimeError> {
                     (Val::Int(a), Val::Int(b)) => Ok(Val::Int(a + b)),
                     (a, b) => Ok(Val::Str(format!("{a}{b}"))),
                 },
-                BinaryOp::Sub => bin_op!(Int[lhs], Int[lhs] -> |a, b| Ok(Val::Int(a - b))),
-                BinaryOp::Mul => bin_op!(Int[lhs], Int[lhs] -> |a, b| Ok(Val::Int(a * b))),
+                BinaryOp::Sub => bin_op!(Int[lhs], Int[rhs] -> |a, b| Ok(Val::Int(a - b))),
+                BinaryOp::Mul => bin_op!(Int[lhs], Int[rhs] -> |a, b| Ok(Val::Int(a * b))),
                 BinaryOp::Div => match (lhs, rhs) {
                     (Val::Int(_), Val::Int(0)) => Err(RuntimeError::division_by_zero(bin.location)),
                     (Val::Int(a), Val::Int(b)) => Ok(Val::Int(a / b)),
