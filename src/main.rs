@@ -207,7 +207,7 @@ fn eval(term: Term, scope: &mut Scope) -> Result<Val, RuntimeError> {
         Term::Bool(bool) => Ok(Val::Bool(bool.value)),
         Term::Print(print) => {
             let val = eval(*print.value, scope)?;
-            print!("{val}");
+            println!("{val}");
             Ok(val)
         }
         Term::Tuple(tuple) => Ok(Val::Tuple((*tuple.first, *tuple.second))),
