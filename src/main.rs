@@ -178,7 +178,7 @@ pub enum Val {
     Int(i32),
     Bool(bool),
     Str(String),
-    Tuple((Term, Term)),
+    Tuple((Box<Val>, Box<Val>)),
     Closure {
         fun: Function,
         env: Rc<RefCell<Scope>>,
@@ -192,7 +192,7 @@ impl Display for Val {
             Val::Bool(true) => write!(f, "true"),
             Val::Bool(false) => write!(f, "false"),
             Val::Str(s) => write!(f, "{s}"),
-            Val::Tuple { .. } => write!(f, "(term, term)"),
+            Val::Tuple((fst, snd)) => write!(f, "({fst}, {snd})"),
             Val::Closure { .. } => write!(f, "<#closure>"),
         }
     }
@@ -210,13 +210,16 @@ fn eval(term: Term, scope: &mut Scope) -> Result<Val, RuntimeError> {
             println!("{val}");
             Ok(val)
         }
-        Term::Tuple(tuple) => Ok(Val::Tuple((*tuple.first, *tuple.second))),
+        Term::Tuple(tuple) => Ok(Val::Tuple((
+            Box::new(eval(*tuple.first, scope)?),
+            Box::new(eval(*tuple.second, scope)?),
+        ))),
         Term::First(t) => match eval(*t.value, scope)? {
-            Val::Tuple((term, _)) => eval(term, scope),
+            Val::Tuple((val, _)) => Ok(*val),
             _ => Err(RuntimeError::new("não é uma tupla", t.location)),
         },
         Term::Second(t) => match eval(*t.value, scope)? {
-            Val::Tuple((_, term)) => eval(term, scope),
+            Val::Tuple((_, val)) => Ok(*val),
             _ => Err(RuntimeError::new("não é uma tupla", t.location)),
         },
 

@@ -1,2 +1,3 @@
 let tuple = ("hello", 10);
-print(first(tuple) + " " + second(tuple))
+let _ = print(first(tuple) + " " + second(tuple));
+print(tuple)
