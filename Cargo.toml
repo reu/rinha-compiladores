@@ -7,3 +7,8 @@ edition = "2021"
 miette = { version = "5.10.0", features = ["fancy"] }
 serde = { version = "1.0.188", features = ["derive"] }
 serde_json = "1.0.106"
+
+[dev-dependencies]
+assert_cmd = "2.0.12"
+indoc = "2.0.3"
+rinha = "0.0.6"
