@@ -45,15 +45,15 @@ pub struct Str {
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Print {
-    value: Box<Term>,
+    value: Term,
     location: Location,
 }
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Binary {
-    rhs: Box<Term>,
+    rhs: Term,
     op: BinaryOp,
-    lhs: Box<Term>,
+    lhs: Term,
     location: Location,
 }
 
@@ -76,9 +76,9 @@ pub enum BinaryOp {
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct If {
-    condition: Box<Term>,
-    then: Box<Term>,
-    otherwise: Box<Term>,
+    condition: Term,
+    then: Term,
+    otherwise: Term,
     location: Location,
 }
 
@@ -91,8 +91,8 @@ pub struct Parameter {
 #[derive(Debug, Clone, Deserialize)]
 pub struct Let {
     name: Parameter,
-    value: Box<Term>,
-    next: Box<Term>,
+    value: Term,
+    next: Term,
     location: Location,
 }
 
@@ -105,33 +105,33 @@ pub struct Var {
 #[derive(Debug, Clone, Deserialize)]
 pub struct Function {
     parameters: Vec<Parameter>,
-    value: Box<Term>,
+    value: Term,
     location: Location,
 }
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Call {
-    callee: Box<Term>,
+    callee: Term,
     arguments: Vec<Term>,
     location: Location,
 }
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Tuple {
-    first: Box<Term>,
-    second: Box<Term>,
+    first: Term,
+    second: Term,
     location: Location,
 }
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct First {
-    value: Box<Term>,
+    value: Term,
     location: Location,
 }
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Second {
-    value: Box<Term>,
+    value: Term,
     location: Location,
 }
 
@@ -141,16 +141,16 @@ pub enum Term {
     Int(Int),
     Str(Str),
     Bool(Bool),
-    Print(Print),
-    Binary(Binary),
-    If(If),
-    Let(Let),
+    Print(Box<Print>),
+    Binary(Box<Binary>),
+    If(Box<If>),
+    Let(Box<Let>),
     Var(Var),
-    Function(Function),
-    Call(Call),
-    Tuple(Tuple),
-    First(First),
-    Second(Second),
+    Function(Box<Function>),
+    Call(Box<Call>),
+    Tuple(Box<Tuple>),
+    First(Box<First>),
+    Second(Box<Second>),
 }
 
 impl Term {
@@ -206,26 +206,26 @@ fn eval(term: Term, scope: &mut Scope) -> Result<Val, RuntimeError> {
         Term::Str(str) => Ok(Val::Str(str.value)),
         Term::Bool(bool) => Ok(Val::Bool(bool.value)),
         Term::Print(print) => {
-            let val = eval(*print.value, scope)?;
+            let val = eval(print.value, scope)?;
             println!("{val}");
             Ok(val)
         }
         Term::Tuple(tuple) => Ok(Val::Tuple((
-            Box::new(eval(*tuple.first, scope)?),
-            Box::new(eval(*tuple.second, scope)?),
+            Box::new(eval(tuple.first, scope)?),
+            Box::new(eval(tuple.second, scope)?),
         ))),
-        Term::First(t) => match eval(*t.value, scope)? {
+        Term::First(t) => match eval(t.value, scope)? {
             Val::Tuple((val, _)) => Ok(*val),
             _ => Err(RuntimeError::new("não é uma tupla", t.location)),
         },
-        Term::Second(t) => match eval(*t.value, scope)? {
+        Term::Second(t) => match eval(t.value, scope)? {
             Val::Tuple((_, val)) => Ok(*val),
             _ => Err(RuntimeError::new("não é uma tupla", t.location)),
         },
 
         Term::Binary(bin) => {
-            let lhs = eval(*bin.lhs, scope)?;
-            let rhs = eval(*bin.rhs, scope)?;
+            let lhs = eval(bin.lhs, scope)?;
+            let rhs = eval(bin.rhs, scope)?;
 
             macro_rules! bin_op {
                 ($left:ident[$lhs:expr], $right:ident[$rhs:expr] -> $f:expr) => {
@@ -271,16 +271,16 @@ fn eval(term: Term, scope: &mut Scope) -> Result<Val, RuntimeError> {
 
         Term::If(i) => {
             let location = i.condition.location().clone();
-            match eval(*i.condition, scope)? {
-                Val::Bool(true) => eval(*i.then, scope),
-                Val::Bool(false) => eval(*i.otherwise, scope),
+            match eval(i.condition, scope)? {
+                Val::Bool(true) => eval(i.then, scope),
+                Val::Bool(false) => eval(i.otherwise, scope),
                 _ => Err(RuntimeError::new("condição inválida", location)),
             }
         }
 
         Term::Let(l) => {
             let name = l.name.text;
-            match eval(*l.value, scope)? {
+            match eval(l.value, scope)? {
                 Val::Closure { fun, env } => {
                     let closure = Val::Closure {
                         fun,
@@ -293,7 +293,7 @@ fn eval(term: Term, scope: &mut Scope) -> Result<Val, RuntimeError> {
                     scope.insert(name, val);
                 }
             };
-            eval(*l.next, scope)
+            eval(l.next, scope)
         }
 
         Term::Var(v) => match scope.get(&v.text) {
@@ -302,21 +302,21 @@ fn eval(term: Term, scope: &mut Scope) -> Result<Val, RuntimeError> {
         },
 
         Term::Function(fun) => Ok(Val::Closure {
-            fun,
+            fun: *fun,
             env: Rc::new(RefCell::new(scope.clone())),
         }),
 
-        Term::Call(call) => match eval(*call.callee.clone(), scope)? {
+        Term::Call(call) => match eval(call.callee.clone(), scope)? {
             Val::Closure { fun, env } => {
                 if call.arguments.len() != fun.parameters.len() {
-                    return Err(RuntimeError::invalid_number_of_arguments(fun, call));
+                    return Err(RuntimeError::invalid_number_of_arguments(fun, *call));
                 }
 
                 let mut new_scope = env.borrow_mut().clone();
                 for (param, arg) in fun.parameters.into_iter().zip(call.arguments) {
                     new_scope.insert(param.text, eval(arg, scope)?);
                 }
-                eval(*fun.value, &mut new_scope)
+                eval(fun.value, &mut new_scope)
             }
             _ => Err(RuntimeError::new("não é uma função", call.location)),
         },
