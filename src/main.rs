@@ -1,6 +1,7 @@
 use std::{
     cell::RefCell,
     collections::HashMap,
+    env::args,
     fmt::Display,
     fs,
     io::{stdin, Read},
@@ -352,8 +353,15 @@ fn eval(term: Term, scope: &Scope) -> Result<Val, RuntimeError> {
 }
 
 fn main() {
-    let mut program = String::new();
-    stdin().lock().read_to_string(&mut program).unwrap();
+    let program = match args().nth(1) {
+        Some(file) => fs::read_to_string(file).unwrap(),
+        None => {
+            let mut buf = String::new();
+            stdin().lock().read_to_string(&mut buf).unwrap();
+            buf
+        }
+    };
+
     let program = serde_json::from_str::<File>(&program).expect("Não parseou");
 
     let term = program.expression;
