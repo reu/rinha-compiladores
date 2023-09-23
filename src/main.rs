@@ -179,10 +179,19 @@ pub enum Val {
     Bool(bool),
     Str(String),
     Tuple((Box<Val>, Box<Val>)),
-    Closure {
-        fun: Function,
-        env: Rc<RefCell<Scope>>,
-    },
+    Closure { fun: Function, env: Scope },
+}
+
+impl PartialEq for Val {
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
+            (Val::Int(a), Val::Int(b)) => a == b,
+            (Val::Bool(a), Val::Bool(b)) => a == b,
+            (Val::Str(a), Val::Str(b)) => a == b,
+            (Val::Tuple(a), Val::Tuple(b)) => a == b,
+            _ => false,
+        }
+    }
 }
 
 impl Display for Val {
@@ -198,9 +207,39 @@ impl Display for Val {
     }
 }
 
-pub type Scope = HashMap<String, Val>;
+#[derive(Debug, Default)]
+pub struct Scope {
+    parent: Option<Rc<Scope>>,
+    current: Rc<RefCell<HashMap<String, Val>>>,
+}
 
-fn eval(term: Term, scope: &mut Scope) -> Result<Val, RuntimeError> {
+impl Scope {
+    pub fn get(&self, var: &str) -> Option<Val> {
+        self.current
+            .borrow()
+            .get(var)
+            .cloned()
+            .or_else(|| self.parent.as_ref()?.get(var))
+    }
+
+    pub fn set(&self, var: impl Into<String>, val: Val) {
+        self.current.borrow_mut().insert(var.into(), val);
+    }
+}
+
+impl Clone for Scope {
+    fn clone(&self) -> Self {
+        Scope {
+            parent: Some(Rc::new(Scope {
+                parent: self.parent.clone(),
+                current: self.current.clone(),
+            })),
+            current: Default::default(),
+        }
+    }
+}
+
+fn eval(term: Term, scope: &Scope) -> Result<Val, RuntimeError> {
     match term {
         Term::Int(number) => Ok(Val::Int(number.value)),
         Term::Str(str) => Ok(Val::Str(str.value)),
@@ -280,19 +319,7 @@ fn eval(term: Term, scope: &mut Scope) -> Result<Val, RuntimeError> {
 
         Term::Let(l) => {
             let name = l.name.text;
-            match eval(l.value, scope)? {
-                Val::Closure { fun, env } => {
-                    let closure = Val::Closure {
-                        fun,
-                        env: env.clone(),
-                    };
-                    env.borrow_mut().insert(name.clone(), closure.clone());
-                    scope.insert(name, closure);
-                }
-                val => {
-                    scope.insert(name, val);
-                }
-            };
+            scope.set(name, eval(l.value, scope)?);
             eval(l.next, scope)
         }
 
@@ -303,7 +330,7 @@ fn eval(term: Term, scope: &mut Scope) -> Result<Val, RuntimeError> {
 
         Term::Function(fun) => Ok(Val::Closure {
             fun: *fun,
-            env: Rc::new(RefCell::new(scope.clone())),
+            env: scope.clone(),
         }),
 
         Term::Call(call) => match eval(call.callee.clone(), scope)? {
@@ -312,11 +339,11 @@ fn eval(term: Term, scope: &mut Scope) -> Result<Val, RuntimeError> {
                     return Err(RuntimeError::invalid_number_of_arguments(fun, *call));
                 }
 
-                let mut new_scope = env.borrow_mut().clone();
                 for (param, arg) in fun.parameters.into_iter().zip(call.arguments) {
-                    new_scope.insert(param.text, eval(arg, scope)?);
+                    env.set(param.text, eval(arg, scope)?);
                 }
-                eval(fun.value, &mut new_scope)
+
+                eval(fun.value, &env)
             }
             _ => Err(RuntimeError::new("não é uma função", call.location)),
         },
@@ -329,13 +356,35 @@ fn main() {
     let program = serde_json::from_str::<File>(&program).expect("Não parseou");
 
     let term = program.expression;
-    let mut scope = HashMap::new();
-    if let Err(error) = eval(term, &mut scope) {
+    let scope = Scope::default();
+    if let Err(error) = eval(term, &scope) {
         if let Ok(source) = fs::read_to_string(program.name) {
             let report = miette::Report::new(error).with_source_code(source);
             print!("{:?}", report)
         } else {
             println!("{}", error);
         }
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn scope_test() {
+        let s1 = Scope::default();
+        s1.set("a", Val::Int(1));
+        s1.set("b", Val::Int(2));
+
+        let s2 = s1.clone();
+        assert_eq!(s1.get("a"), Some(Val::Int(1)));
+        assert_eq!(s2.get("a"), Some(Val::Int(1)));
+        s2.set("a", Val::Int(2));
+        assert_eq!(s2.get("a"), Some(Val::Int(2)));
+
+        let s3 = s2.clone();
+        assert_eq!(s3.get("a"), Some(Val::Int(2)));
+        assert_eq!(s3.get("b"), Some(Val::Int(2)));
     }
 }
