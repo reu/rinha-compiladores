@@ -357,7 +357,7 @@ fn eval(term: Term, scope: &Scope) -> Result<Val, RuntimeError> {
 
 fn main() {
     let program = match args().nth(1) {
-        Some(file) => fs::read_to_string(file).unwrap(),
+        Some(file) => fs::read_to_string(file).expect("Arquivo não encontrado"),
         None => {
             let mut buf = String::new();
             stdin().lock().read_to_string(&mut buf).unwrap();
@@ -365,7 +365,7 @@ fn main() {
         }
     };
 
-    let program = serde_json::from_str::<File>(&program).expect("Não parseou");
+    let program = serde_json::from_str::<File>(&program).expect("Programa inválido");
 
     let term = program.expression;
     let scope = Scope::default();
