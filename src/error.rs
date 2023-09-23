@@ -2,7 +2,7 @@ use std::fmt::Display;
 
 use miette::{Diagnostic, LabeledSpan};
 
-use crate::{Call, Function, Location, Var};
+use crate::{Function, Location, Var};
 
 #[derive(Debug)]
 pub enum ErrorKind {
@@ -10,7 +10,7 @@ pub enum ErrorKind {
     DivisionByZero,
     UnknowIdentifier(Var),
     InvalidBinaryOperation,
-    InvalidNumberOfArguments(Function, Call),
+    InvalidNumberOfArguments(Function, Location),
 }
 
 #[derive(Debug)]
@@ -53,11 +53,11 @@ impl RuntimeError {
         }
     }
 
-    pub fn invalid_number_of_arguments(fun: Function, call: Call) -> Self {
+    pub fn invalid_number_of_arguments(fun: Function, loc: Location) -> Self {
         Self {
             message: "número de argumentos inválidos".into(),
-            location: call.location.clone(),
-            kind: ErrorKind::InvalidNumberOfArguments(fun, call),
+            location: loc.clone(),
+            kind: ErrorKind::InvalidNumberOfArguments(fun, loc),
         }
     }
 }
@@ -91,12 +91,9 @@ impl Diagnostic for RuntimeError {
                 .into_iter(),
             )),
 
-            ErrorKind::InvalidNumberOfArguments(ref fun, ref call) => Some(Box::new(
+            ErrorKind::InvalidNumberOfArguments(ref fun, ref loc) => Some(Box::new(
                 [
-                    LabeledSpan::at(
-                        call.location.start..call.location.end,
-                        "parâmetros informados",
-                    ),
+                    LabeledSpan::at(loc.start..loc.end, "parâmetros informados"),
                     LabeledSpan::at(
                         if fun.parameters.is_empty() {
                             fun.location.start..fun.location.start + 2

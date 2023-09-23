@@ -335,10 +335,13 @@ fn eval(term: Term, scope: &Scope) -> Result<Val, RuntimeError> {
             env: scope.clone(),
         }),
 
-        Term::Call(call) => match eval(call.callee.clone(), scope)? {
+        Term::Call(call) => match eval(call.callee, scope)? {
             Val::Closure { fun, env } => {
                 if call.arguments.len() != fun.parameters.len() {
-                    return Err(RuntimeError::invalid_number_of_arguments(fun, *call));
+                    return Err(RuntimeError::invalid_number_of_arguments(
+                        fun,
+                        call.location,
+                    ));
                 }
 
                 for (param, arg) in fun.parameters.into_iter().zip(call.arguments) {
