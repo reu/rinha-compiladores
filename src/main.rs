@@ -274,6 +274,7 @@ fn eval(term: Term, scope: &Scope) -> Result<Val, RuntimeError> {
                     }
                 };
             }
+            #[allow(clippy::redundant_closure_call)]
             match bin.op {
                 BinaryOp::Add => match (lhs, rhs) {
                     (Val::Int(a), Val::Int(b)) => Ok(Val::Int(a + b)),
