@@ -15,4 +15,4 @@ FROM debian:buster-slim
 
 COPY --from=build /rinha/target/release/rinha-compiladores /rinha
 
-CMD "/rinha"
+CMD ["/rinha", "/var/rinha/source.rinha.json"]
