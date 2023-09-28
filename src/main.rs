@@ -365,7 +365,12 @@ fn main() {
         }
     };
 
-    let program = serde_json::from_str::<File>(&program).expect("Programa inválido");
+    let program = {
+        let mut deserializer = serde_json::Deserializer::from_str(&program);
+        deserializer.disable_recursion_limit();
+        let deserializer = serde_stacker::Deserializer::new(&mut deserializer);
+        File::deserialize(deserializer).expect("Programa inválido")
+    };
 
     let term = program.expression;
     let scope = Scope::default();
